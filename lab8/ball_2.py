@@ -27,7 +27,7 @@ data.close()
 
 
 def new_ball():
-    '''рисует новый шарик и возвращает его координаты и цвет'''
+    '''рисует новый шарик и возвращает его координаты и радиус, цвет, скорость'''
     x = randint(100, X_SIZE-100)
     y = randint(100, Y_SIZE-100)
     r = randint(10, 100)
@@ -53,7 +53,7 @@ def draw_ball(params):
     circle(screen, color, (X, Y), r)
 
 def move_ball(params, i):
-    '''Двигает шарики'''
+    '''Двигает i-ый шарик '''
     (X, Y) = (params[0][0], params[0][1])
     (Vx, Vy) = (params[2][0], params[2][1])
     r = params[0][2]
@@ -79,6 +79,8 @@ def check_click_ball(xyr, xy):
     :return: Возвращает True если попасть по шарику кликом и False если не попасть
     '''
     if (xy[0]-xyr[0])**2 + (xy[1]-xyr[1])**2 <= xyr[2]**2:
+        return True
+
 
 
 pygame.display.update()
@@ -179,20 +181,17 @@ while not finished:
         finished = True
         print('Total score:', N)
 
-done = False
-
+# Game over!
 font = pygame.font.SysFont(None, 150)
 
 text = font.render("Game Over!", True, (255, 255, 255))
 
-while not done:
+while not finished:
     for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-        if event.type == pygame.MOUSEMOTION:
-            done = True
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            done = True
+        if event.type == pygame.QUIT or \
+                event.type == pygame.MOUSEMOTION or \
+                event.type == pygame.MOUSEBUTTONDOWN:
+            finished = True
 
     screen.fill((0, 0, 0))
     screen.blit(text,(150,250))
