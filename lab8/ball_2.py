@@ -79,9 +79,6 @@ def check_click_ball(xyr, xy):
     :return: Возвращает True если попасть по шарику кликом и False если не попасть
     '''
     if (xy[0]-xyr[0])**2 + (xy[1]-xyr[1])**2 <= xyr[2]**2:
-        return True
-    else:
-        return False
 
 
 pygame.display.update()
@@ -182,6 +179,26 @@ while not finished:
         finished = True
         print('Total score:', N)
 
+done = False
+
+font = pygame.font.SysFont(None, 150)
+
+text = font.render("Game Over!", True, (255, 255, 255))
+
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+        if event.type == pygame.MOUSEMOTION:
+            done = True
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            done = True
+
+    screen.fill((0, 0, 0))
+    screen.blit(text,(150,250))
+
+    pygame.display.flip()
+    clock.tick(10)
 
 #Вывод таблицы с результатами
 table = open('table.txt', 'w')
@@ -209,8 +226,5 @@ while not finished:
         screen.blit(text[i], (10, 50 + 12*i))
     pygame.display.flip()
 
-text_game_over = font.render('Game over!', True, [255, 255, 255])
-surface.blit(text_game_over, (WIDTH // 2 - 120, HEIGHT // 2 - 20))
-pygame.display.flip()
 
 pygame.quit()
