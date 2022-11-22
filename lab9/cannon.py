@@ -73,8 +73,6 @@ class Ball:
         """
         if (self.x-obj.x)**2 + (self.y - obj.y)**2 <= (self.r + obj.r)**2:
             return True
-        else:
-            return False
 
 
 class Gun:
@@ -156,6 +154,20 @@ class Target:
         """Попадание шарика в цель."""
         self.points += points
 
+    def move(self):
+
+        self.x += self.vx
+        self.y -= self.vy
+        if (self.y >= HEIGHT - self.r - 1) or (self.y <= 10): self.vy = -self.vy
+        if (self.x >= WIDTH - self.r - 1) or (self.x <= 10): self.vx = -self.vx
+
+    def draw(self):
+        pygame.draw.circle(
+            self.screen,
+            self.color,
+            (self.x, self.y),
+            self.r
+        )
 
 
 
@@ -166,17 +178,21 @@ pygame.font.init()
 f1 = pygame.font.Font(None, 36)
 bullet = 0
 balls = []
-
+targets = []
 
 clock = pygame.time.Clock()
 gun = Gun(screen)
+for i in range(2):
+    targets.append(Target())
 finished = False
 
 while not finished:
     screen.fill(WHITE)
     gun.draw()
+    for target in targets:
+        target.draw()
     for b in balls:
-        if b.live<0: balls.remove(b)
+        if b.live < 0: balls.remove(b)
         b.draw()
 
 
@@ -193,10 +209,14 @@ while not finished:
         elif event.type == pygame.MOUSEMOTION:
             gun.targetting(event)
 
+
     for b in balls:
         b.move()
-
-
+        for target in targets:
+            if b.hittest(target) and target.live:
+                target.live = 0
+                target.hit()
+                target.new_target()
     gun.power_up()
 
 pygame.quit()
