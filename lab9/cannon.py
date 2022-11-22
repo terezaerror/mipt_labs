@@ -175,7 +175,7 @@ class Target:
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.font.init()
-f1 = pygame.font.Font(None, 36)
+font = pygame.font.Font(None, 36)
 bullet = 0
 balls = []
 targets = []
@@ -195,8 +195,14 @@ while not finished:
         if b.live < 0: balls.remove(b)
         b.draw()
 
+    score = 0
+    for target in targets:
+        score += target.points
+    text_score = font.render('Score: ' + str(score), False, (0, 0, 0))
+    screen.blit(text_score, (10, 50))
 
     pygame.display.update()
+
 
     clock.tick(FPS)
     for event in pygame.event.get():
