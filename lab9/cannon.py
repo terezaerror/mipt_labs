@@ -214,6 +214,8 @@ while not finished:
             gun.fire2_end(event)
         elif event.type == pygame.MOUSEMOTION:
             gun.targetting(event)
+    for target in targets:
+        target.move()
 
 
     for b in balls:
